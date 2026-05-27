@@ -132,7 +132,7 @@ function CartScreen({ cart, setCart, onPay, payChecked, setPayChecked }) {
                   <span style={ffPill({ color: FF.textMute, fontSize: 10.5 })}>En attente</span>
                 )}
               </div>
-              <div style={{ display: 'grid', gap: 8 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {items.map(c => {
                   const p = PRODUCT_BY_ID[c.product];
                   const checked = payChecked.has(c.id);
@@ -146,6 +146,7 @@ function CartScreen({ cart, setCart, onPay, payChecked, setPayChecked }) {
                       cursor: locked ? 'default' : 'pointer',
                       opacity: locked ? 0.55 : 1,
                       transition: 'all .15s',
+                      boxSizing: 'border-box',
                     }}>
                       {/* Checkbox */}
                       <div style={{
@@ -160,7 +161,7 @@ function CartScreen({ cart, setCart, onPay, payChecked, setPayChecked }) {
                         <ProductImg tint={p.tint} label={p.id} height={44} radius={10}/>
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontFamily:'"Space Grotesk"', fontWeight: 700, fontSize: 13.5, color: FF.text }}>{p.name}</div>
+                        <div style={{ fontFamily:'"Space Grotesk"', fontWeight: 700, fontSize: 13.5, color: FF.text, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{p.name}</div>
                         <div style={{ fontSize: 11, color: FF.textDim, marginTop: 1, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{p.desc}</div>
                       </div>
                       <div style={{ fontFamily:'"Space Grotesk"', fontWeight: 700, fontSize: 13.5, color: checked ? FF.yellow : FF.text, flexShrink: 0 }}>

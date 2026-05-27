@@ -193,7 +193,7 @@ function IOSDevice({
 }) {
   return (
     <div style={{
-      width, height, borderRadius: 48, overflow: 'hidden',
+      width, maxWidth: '100%', height, borderRadius: 48, overflow: 'hidden',
       position: 'relative', background: dark ? '#000' : '#F2F2F7',
       boxShadow: '0 40px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.12)',
       fontFamily: '-apple-system, system-ui, sans-serif',

@@ -272,17 +272,18 @@ function BottomNav({ tab, setTab, cartCount, groupTotal, onOpenCart }) {
           boxShadow: '0 14px 30px rgba(17,17,20,0.22)',
           width: 'calc(100% - 28px)',
           animation: 'ffPop .3s ease-out',
+          boxSizing: 'border-box', overflow: 'hidden',
         }}>
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', flexShrink: 0 }}>
             {GROUP_MEMBERS.slice(0,3).map((m, i) => (
-              <div key={m.id} style={{ marginLeft: i === 0 ? 0 : -8 }}><Avatar id={m.id} size={26} ring/></div>
+              <div key={m.id} style={{ marginLeft: i === 0 ? 0 : -8, flexShrink: 0 }}><Avatar id={m.id} size={26} ring/></div>
             ))}
           </div>
-          <div style={{ flex: 1, textAlign: 'left' }}>
-            <div style={{ fontSize: 12.5, fontWeight: 700, color: '#fff' }}>Grab Groupe · Table 12</div>
-            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.72)' }}>{cartCount} articles · {groupTotal.toFixed(2)} €</div>
+          <div style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
+            <div style={{ fontSize: 12.5, fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Grab Groupe · Table 12</div>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.72)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{cartCount} articles · {groupTotal.toFixed(2)} €</div>
           </div>
-          <div style={{ padding: '7px 12px', borderRadius: 10, background: FF.yellow, color: '#111114', fontSize: 12, fontWeight: 900 }}>
+          <div style={{ padding: '7px 12px', borderRadius: 10, background: FF.yellow, color: '#111114', fontSize: 12, fontWeight: 900, flexShrink: 0 }}>
             Voir
           </div>
         </button>
@@ -318,7 +319,11 @@ function BottomNav({ tab, setTab, cartCount, groupTotal, onOpenCart }) {
                   }}>{it.badge}</span>
                 )}
               </div>
-              <span style={{ fontSize: 10, fontWeight: active ? 700 : 500, letterSpacing: 0.1 }}>{it.label}</span>
+              <span style={{
+                fontSize: 10, fontWeight: active ? 700 : 500, letterSpacing: 0.1,
+                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                width: '100%', textAlign: 'center'
+              }}>{it.label}</span>
             </button>
           );
         })}

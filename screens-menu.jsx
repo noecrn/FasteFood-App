@@ -99,7 +99,7 @@ function MenuScreen({ onOpenAssistant, onAddToGroup, onOpenCart, groupCount, gro
         <div style={{ padding: '0 22px', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
           <h3 style={sectionTitle}>Populaire chez les étudiants</h3>
         </div>
-        <div style={{ padding: '12px 22px 0', display: 'grid', gap: 10 }}>
+        <div style={{ padding: '12px 22px 0', display: 'flex', flexDirection: 'column', gap: 10 }}>
           {popular.map(p => <PopularRow key={p.id} product={p} onAdd={() => onAddToGroup(p.id)} />)}
         </div>
       </div>
@@ -137,19 +137,20 @@ function PopularRow({ product, onAdd }) {
       padding: 10, borderRadius: 18, background: FF.card,
       border: `1px solid ${FF.line}`,
       display: 'flex', alignItems: 'center', gap: 12,
+      width: '100%', boxSizing: 'border-box',
     }}>
       <div style={{ width: 64, height: 64, flexShrink: 0 }}>
         <ProductImg tint={product.tint} label={product.id} height={64} radius={12}/>
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display:'flex', alignItems:'center', gap: 6, flexWrap:'wrap' }}>
-          <span style={{ fontFamily:'"Space Grotesk"', fontSize: 14.5, fontWeight: 700 }}>{product.name}</span>
-          {product.spicy > 0 && <span style={{ display:'inline-flex', gap: 1 }}>{Array.from({length: product.spicy}).map((_,i)=>(<Icons.Flame key={i} size={11} color={FF.orange} sw={2}/>))}</span>}
+        <div style={{ display:'flex', alignItems:'center', gap: 6, flexWrap:'nowrap', overflow:'hidden' }}>
+          <span style={{ fontFamily:'"Space Grotesk"', fontSize: 14.5, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.name}</span>
+          {product.spicy > 0 && <span style={{ display:'inline-flex', gap: 1, flexShrink: 0 }}>{Array.from({length: product.spicy}).map((_,i)=>(<Icons.Flame key={i} size={11} color={FF.orange} sw={2}/>))}</span>}
         </div>
         <div style={{ fontSize: 11.5, color: FF.textDim, marginTop: 1, lineHeight: 1.3, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{product.desc}</div>
         <div style={{ marginTop: 4, fontFamily:'"Space Grotesk"', fontWeight: 700, fontSize: 13.5 }}>{product.price.toFixed(2)} €</div>
       </div>
-      <button onClick={onAdd} style={{...addBtn, width: 36, height: 36 }}>
+      <button onClick={onAdd} style={{...addBtn, width: 36, height: 36, flexShrink: 0 }}>
         <Icons.Plus size={18} color="#0A0A0C" sw={2.5}/>
       </button>
     </div>
