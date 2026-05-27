@@ -103,30 +103,6 @@ function MenuScreen({ onOpenAssistant, onAddToGroup, onOpenCart, groupCount, gro
           {popular.map(p => <PopularRow key={p.id} product={p} onAdd={() => onAddToGroup(p.id)} />)}
         </div>
       </div>
-
-      {/* Floating Grab Groupe FAB */}
-      {groupCount > 0 && (
-        <button onClick={onOpenCart} style={{
-          position: 'sticky', bottom: 88, margin: '22px 22px 0',
-          padding: '12px 14px', borderRadius: 16,
-          background: '#111114', border: `1px solid rgba(255,255,255,0.10)`,
-          display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer',
-          boxShadow: '0 14px 30px rgba(17,17,20,0.22)',
-        }}>
-          <div style={{ display: 'flex' }}>
-            {GROUP_MEMBERS.slice(0,3).map((m, i) => (
-              <div key={m.id} style={{ marginLeft: i === 0 ? 0 : -8 }}><Avatar id={m.id} size={26} ring/></div>
-            ))}
-          </div>
-          <div style={{ flex: 1, textAlign: 'left' }}>
-            <div style={{ fontSize: 12.5, fontWeight: 700, color: '#fff' }}>Grab Groupe · Table 12</div>
-            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.72)' }}>{groupCount} articles · {groupTotal.toFixed(2)} €</div>
-          </div>
-          <div style={{ padding: '7px 12px', borderRadius: 10, background: FF.yellow, color: '#111114', fontSize: 12, fontWeight: 900 }}>
-            Voir
-          </div>
-        </button>
-      )}
     </div>
   );
 }
