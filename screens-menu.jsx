@@ -10,11 +10,11 @@ function MenuScreen({ onOpenAssistant, onAddToGroup, onOpenCart, groupCount, gro
   const popular = PRODUCTS.slice(0, 4);
 
   return (
-    <div style={{ paddingBottom: 140, color: FF.text, fontFamily: '-apple-system, system-ui, sans-serif' }}>
+    <div style={{ paddingBottom: 140, color: FF.text, fontFamily: '-apple-system, system-ui, sans-serif', overflowX: 'hidden' }}>
       {/* Header */}
       <div style={{ padding: '60px 22px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <div style={{ fontSize: 12, color: FF.textMute, letterSpacing: 0.2 }}>Salut, Léo 👋</div>
+          <div style={{ fontSize: 12, color: FF.textMute, letterSpacing: 0.2 }}>Salut, Thibaut</div>
           <div style={{ fontFamily: '"Space Grotesk", system-ui', fontSize: 24, fontWeight: 700, marginTop: 2, letterSpacing: -0.5 }}>
             Qu'est-ce qu'on mange ?
           </div>
@@ -24,38 +24,17 @@ function MenuScreen({ onOpenAssistant, onAddToGroup, onOpenCart, groupCount, gro
         </button>
       </div>
 
-      {/* Loyalty status card */}
-      <div style={{ margin: '18px 22px 0', padding: '14px 16px', borderRadius: 18,
-        background: `linear-gradient(135deg, ${FF.cardHi}, ${FF.card})`,
-        border: `1px solid ${FF.line}`,
-        display: 'flex', alignItems: 'center', gap: 12,
-      }}>
-        <div style={{ width: 40, height: 40, borderRadius: 12, background: `${FF.yellow}1A`, display:'flex', alignItems:'center', justifyContent:'center' }}>
-          <Icons.Trophy size={20} color={FF.yellow}/>
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-            <span style={{ fontSize: 13, color: FF.textDim }}>Statut Étudiant</span>
-            <span style={{ fontSize: 11, padding: '1.5px 7px', borderRadius: 999, background: FF.yellow, color: '#0A0A0C', fontWeight: 700 }}>OR</span>
-          </div>
-          <div style={{ fontFamily:'"Space Grotesk"', fontSize: 18, fontWeight: 700, marginTop: 1 }}>480 <span style={{ fontSize: 11, color: FF.textDim, fontWeight: 500 }}>pts · plus que 120 avant Platine</span></div>
-          <div style={{ marginTop: 7, height: 4, borderRadius: 4, background: 'rgba(255,255,255,0.07)', overflow:'hidden' }}>
-            <div style={{ width: '80%', height: '100%', background: `linear-gradient(90deg, ${FF.yellow}, #B6FF1A)` }}/>
-          </div>
-        </div>
-      </div>
-
       {/* Assistant banner */}
       <button onClick={onOpenAssistant} style={{
         margin: '14px 22px 0', padding: '16px 18px', borderRadius: 22,
-        background: FF.yellow, color: '#0A0A0C',
+        background: FF.yellow, color: '#111114',
         display: 'flex', alignItems: 'center', gap: 14,
         width: 'calc(100% - 44px)', border: 'none', cursor: 'pointer',
         boxShadow: `0 12px 30px -10px ${FF.yellow}80`,
         position: 'relative', overflow: 'hidden',
       }}>
         <div style={{
-          width: 48, height: 48, borderRadius: 14, background: '#0A0A0C',
+          width: 48, height: 48, borderRadius: 14, background: '#111114',
           display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
         }}>
           <Icons.Sparkle size={22} color={FF.yellow}/>
@@ -64,7 +43,7 @@ function MenuScreen({ onOpenAssistant, onAddToGroup, onOpenCart, groupCount, gro
           <div style={{ fontFamily:'"Space Grotesk"', fontSize: 16, fontWeight: 700, letterSpacing: -0.2 }}>Pas d'idée ce midi ?</div>
           <div style={{ fontSize: 12, fontWeight: 500, opacity: 0.7, marginTop: 1 }}>L'Assistant te trouve un plat en 15 sec.</div>
         </div>
-        <Icons.ArrowRight size={20} color="#0A0A0C"/>
+        <Icons.ArrowRight size={20} color="#111114"/>
         {/* decorative tag */}
         <div style={{ position:'absolute', top: -8, right: -8, width: 70, height: 70, borderRadius: 70, background: 'rgba(0,0,0,0.06)'}}/>
       </button>
@@ -84,13 +63,13 @@ function MenuScreen({ onOpenAssistant, onAddToGroup, onOpenCart, groupCount, gro
                 <button key={c.id} onClick={() => setActiveCat(c.id)} style={{
                   flexShrink: 0, padding: '10px 14px 10px 12px', borderRadius: 14,
                   display: 'flex', alignItems: 'center', gap: 9,
-                  background: active ? FF.text : FF.card,
-                  color: active ? '#0A0A0C' : FF.text,
-                  border: `1px solid ${active ? FF.text : FF.line}`,
+                  background: active ? '#111114' : FF.card,
+                  color: active ? '#FFFFFF' : FF.text,
+                  border: `1px solid ${active ? '#111114' : FF.line}`,
                   cursor: 'pointer', transition: 'all .15s',
                 }}>
-                  <div style={{ width: 26, height: 26, borderRadius: 8, background: active ? '#0A0A0C' : `${c.tint}22`, display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <Cmp size={15} color={active ? c.tint : c.tint}/>
+                  <div style={{ width: 26, height: 26, borderRadius: 8, background: active ? '#FFFFFF' : `${c.tint}22`, display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    <Cmp size={15} color={active ? '#111114' : c.tint}/>
                   </div>
                   <span style={{ fontSize: 13, fontWeight: 600 }}>{c.label}</span>
                 </button>
@@ -128,11 +107,11 @@ function MenuScreen({ onOpenAssistant, onAddToGroup, onOpenCart, groupCount, gro
       {/* Floating Grab Groupe FAB */}
       {groupCount > 0 && (
         <button onClick={onOpenCart} style={{
-          position: 'absolute', bottom: 96, left: 22, right: 22,
+          position: 'sticky', bottom: 88, margin: '22px 22px 0',
           padding: '12px 14px', borderRadius: 16,
-          background: '#0A0A0C', border: `1px solid ${FF.lineHi}`,
+          background: '#111114', border: `1px solid rgba(255,255,255,0.10)`,
           display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer',
-          boxShadow: '0 14px 30px rgba(0,0,0,0.55)',
+          boxShadow: '0 14px 30px rgba(17,17,20,0.22)',
         }}>
           <div style={{ display: 'flex' }}>
             {GROUP_MEMBERS.slice(0,3).map((m, i) => (
@@ -140,10 +119,10 @@ function MenuScreen({ onOpenAssistant, onAddToGroup, onOpenCart, groupCount, gro
             ))}
           </div>
           <div style={{ flex: 1, textAlign: 'left' }}>
-            <div style={{ fontSize: 12.5, fontWeight: 600, color: FF.text }}>Grab Groupe · Table 12</div>
-            <div style={{ fontSize: 11, color: FF.textDim }}>{groupCount} articles · {groupTotal.toFixed(2)} €</div>
+            <div style={{ fontSize: 12.5, fontWeight: 700, color: '#fff' }}>Grab Groupe · Table 12</div>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.72)' }}>{groupCount} articles · {groupTotal.toFixed(2)} €</div>
           </div>
-          <div style={{ padding: '7px 12px', borderRadius: 10, background: FF.yellow, color: '#0A0A0C', fontSize: 12, fontWeight: 700 }}>
+          <div style={{ padding: '7px 12px', borderRadius: 10, background: FF.yellow, color: '#111114', fontSize: 12, fontWeight: 900 }}>
             Voir
           </div>
         </button>

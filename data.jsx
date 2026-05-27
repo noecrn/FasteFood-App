@@ -1,18 +1,21 @@
 // Faste Food — Shared design tokens + product/data fixtures
 const FF = {
-  bg: '#0A0A0C',
-  bg2: '#0F0F12',
-  card: '#16161A',
-  cardHi: '#1C1C22',
-  line: 'rgba(255,255,255,0.06)',
-  lineHi: 'rgba(255,255,255,0.12)',
-  text: '#FFFFFF',
-  textDim: 'rgba(255,255,255,0.62)',
-  textMute: 'rgba(255,255,255,0.42)',
-  yellow: '#E8FF3D',
-  orange: '#FF6B1F',
-  green: '#7DF29F',
-  pink: '#FF7AB8',
+  // Light-only base
+  bg: '#F7F7F9',
+  bg2: '#FFFFFF',
+  card: '#FFFFFF',
+  cardHi: '#FFFFFF',
+  line: 'rgba(17, 17, 20, 0.08)',
+  lineHi: 'rgba(17, 17, 20, 0.14)',
+  text: '#111114',
+  textDim: 'rgba(17, 17, 20, 0.68)',
+  textMute: 'rgba(17, 17, 20, 0.48)',
+
+  // Fast-food retail accents (McDo/BK-like codes, but unique)
+  yellow: '#FFC52C',
+  orange: '#FF4D2D',
+  green: '#2AD174',
+  pink: '#FF4DA6',
 };
 
 window.FF = FF;
@@ -40,21 +43,20 @@ const PRODUCTS = [
 
 // Group order — 4 members, ~12 items
 const GROUP_MEMBERS = [
-  { id: 'leo',   name: 'Léo',    color: '#E8FF3D', initials: 'L', you: true },
-  { id: 'sarah', name: 'Sarah',  color: '#FF7AB8', initials: 'S' },
-  { id: 'karim', name: 'Karim',  color: '#7DF29F', initials: 'K' },
-  { id: 'ines',  name: 'Inès',   color: '#9EAEFF', initials: 'I' },
+  { id: 'thibaut', name: 'Thibaut', color: '#FFC52C', initials: 'T', you: true },
+  { id: 'lola',    name: 'Lola',    color: '#FF4DA6', initials: 'L' },
+  { id: 'yass',    name: 'Yass',    color: '#2AD174', initials: 'Y' },
 ];
 
 const GROUP_CART = [
-  { id: 'c1', product: 'smash',    qty: 1, addedBy: 'leo'   },
-  { id: 'c2', product: 'frites',   qty: 1, addedBy: 'leo'   },
-  { id: 'c3', product: 'algerois', qty: 1, addedBy: 'sarah' },
-  { id: 'c4', product: 'wings',    qty: 1, addedBy: 'karim' },
-  { id: 'c5', product: 'frites',   qty: 1, addedBy: 'karim' },
-  { id: 'c6', product: 'poke',     qty: 1, addedBy: 'ines'  },
-  { id: 'c7', product: 'birria',   qty: 1, addedBy: 'sarah' },
-  { id: 'c8', product: 'crispy',   qty: 1, addedBy: 'leo'   },
+  { id: 'c1', product: 'smash',    qty: 1, addedBy: 'thibaut' },
+  { id: 'c2', product: 'frites',   qty: 1, addedBy: 'thibaut' },
+  { id: 'c3', product: 'algerois', qty: 1, addedBy: 'lola'    },
+  { id: 'c4', product: 'wings',    qty: 1, addedBy: 'yass'    },
+  { id: 'c5', product: 'frites',   qty: 1, addedBy: 'yass'    },
+  { id: 'c6', product: 'poke',     qty: 1, addedBy: 'lola'    },
+  { id: 'c7', product: 'birria',   qty: 1, addedBy: 'lola'    },
+  { id: 'c8', product: 'crispy',   qty: 1, addedBy: 'thibaut' },
 ];
 
 const PRODUCT_BY_ID = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));

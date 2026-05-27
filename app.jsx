@@ -2,7 +2,7 @@
 const { useState: useStateA, useEffect: useEffectA, useRef: useRefA, useMemo: useMemoA } = React;
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "accent": ["#E8FF3D","#FF6B1F"],
+  "accent": ["#FFC52C","#FF4D2D"],
   "density": "comfy",
   "showStudentBanner": true
 }/*EDITMODE-END*/;
@@ -26,15 +26,35 @@ function App() {
   const [toast, setToast] = useStateA(null);
   const [paySheet, setPaySheet] = useStateA(null); // null | 'confirming' | 'success'
 
+  // Pre-app session gate (QR entry)
+  const [session, setSession] = useStateA(null); // { table, sessionCode, role, status, billingMode }
+
+  // Demo presence + real-time-ish activity feed (Grab-like)
+  const [presence, setPresence] = useStateA(() => ({
+    thibaut: { joined: true,  ready: false, paid: false },
+    lola:    { joined: true,  ready: false, paid: false },
+    yass:    { joined: true,  ready: false, paid: false },
+  }));
+  const [activity, setActivity] = useStateA(() => ([
+    { id: 'a1', t: Date.now() - 1000 * 60 * 2, text: 'Lola a rejoint la commande' },
+    { id: 'a2', t: Date.now() - 1000 * 60,     text: 'Yass a rejoint la commande' },
+  ]));
+
+  const pushActivity = (text) => {
+    const id = `a${Date.now()}`;
+    setActivity(a => [{ id, t: Date.now(), text }, ...a].slice(0, 8));
+  };
+
   const groupTotal = cart.reduce((s, c) => s + PRODUCT_BY_ID[c.product].price * c.qty, 0);
   const myTotal = cart.reduce((s, c) => payChecked.has(c.id) ? s + PRODUCT_BY_ID[c.product].price * c.qty : s, 0);
 
   // Add to group from any screen
   const addToGroup = (productId) => {
     const id = `c${Date.now()}`;
-    setCart(c => [...c, { id, product: productId, qty: 1, addedBy: 'leo' }]);
+    setCart(c => [...c, { id, product: productId, qty: 1, addedBy: 'thibaut' }]);
     const p = PRODUCT_BY_ID[productId];
     setToast(`+ ${p.name} ajouté au groupe`);
+    pushActivity(`Thibaut a ajouté “${p.name}”`);
     setTimeout(() => setToast(null), 1800);
   };
 
@@ -51,45 +71,74 @@ function App() {
     }, 1900);
   };
 
+  // Wiring payment to presence (split-bill default)
+  useEffectA(() => {
+    if (!session || session.billingMode !== 'split') return;
+    // If paySheet is open/success we keep logic inside CartScreen (which will call setPresence),
+    // but as a safety: if nothing selected, ensure (toi) isn't flagged paid.
+    if (payChecked.size === 0) {
+      setPresence(p => ({ ...p, thibaut: { ...p.thibaut, paid: false } }));
+    }
+  }, [session, payChecked.size]);
+
   // For Tweaks panel: knobs
   return (
-    <div style={{ minHeight: '100vh', background: '#1A1A20', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, fontFamily: '"Space Grotesk", system-ui, sans-serif' }}>
-      <IOSDevice dark width={402} height={874}>
+    <div style={{ minHeight: '100vh', background: '#ECECF2', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, fontFamily: '"Space Grotesk", system-ui, sans-serif' }}>
+      <IOSDevice dark={false} width={402} height={874}>
         <div style={{
           position: 'absolute', inset: 0, background: FF.bg,
           color: FF.text, overflow: 'hidden',
         }}>
           {/* Screen container with scroll */}
           <div style={{ height: '100%', overflowY: 'auto', overflowX: 'hidden', position: 'relative' }}>
-            {tab === 'menu' &&
-              <MenuScreen
-                onOpenAssistant={() => setTab('assistant')}
-                onAddToGroup={addToGroup}
-                onOpenCart={() => setTab('cart')}
-                groupCount={cart.length}
-                groupTotal={groupTotal}
-              />
-            }
-            {tab === 'assistant' &&
-              <AssistantScreen
-                onAddToGroup={addToGroup}
-                goMenu={() => setTab('menu')}
-              />
-            }
-            {tab === 'cart' &&
-              <CartScreen
-                cart={cart}
-                setCart={setCart}
-                onPay={startPay}
-                payChecked={payChecked}
-                setPayChecked={setPayChecked}
-              />
-            }
-            {tab === 'loyalty' && <LoyaltyScreen/>}
+            {!session ? (
+              <QrEntryScreen onEnter={(s) => { setSession(s); setTab('menu'); }} />
+            ) : (
+              <>
+                {tab === 'menu' &&
+                  <MenuScreen
+                    onOpenAssistant={() => setTab('assistant')}
+                    onAddToGroup={addToGroup}
+                    onOpenCart={() => setTab('cart')}
+                    groupCount={cart.length}
+                    groupTotal={groupTotal}
+                    session={session}
+                    setSession={setSession}
+                    presence={presence}
+                    setPresence={setPresence}
+                    activity={activity}
+                    pushActivity={pushActivity}
+                  />
+                }
+                {tab === 'assistant' &&
+                  <AssistantScreen
+                    onAddToGroup={addToGroup}
+                    goMenu={() => setTab('menu')}
+                    session={session}
+                  />
+                }
+                {tab === 'cart' &&
+                  <CartScreen
+                    cart={cart}
+                    setCart={setCart}
+                    onPay={startPay}
+                    payChecked={payChecked}
+                    setPayChecked={setPayChecked}
+                    session={session}
+                    setSession={setSession}
+                    presence={presence}
+                    setPresence={setPresence}
+                    activity={activity}
+                    pushActivity={pushActivity}
+                  />
+                }
+                {tab === 'loyalty' && <LoyaltyScreen session={session} />}
+              </>
+            )}
           </div>
 
           {/* Bottom nav */}
-          <BottomNav tab={tab} setTab={setTab} cartCount={cart.length}/>
+          {session && <BottomNav tab={tab} setTab={setTab} cartCount={cart.length}/>}
 
           {/* Toast */}
           {toast && (
@@ -140,16 +189,31 @@ function App() {
             ]}
           />
         </TweakSection>
+        <TweakSection label="Session (démo)">
+          <TweakButton secondary label={session ? `Quitter la table ${session.table}` : 'Aller au scan QR'} onClick={() => {
+            setSession(null);
+            setTab('menu');
+          }}/>
+        </TweakSection>
         <TweakSection label="Démo Grab Groupe">
           <TweakButton label="Cocher mes articles" onClick={() => {
             const next = new Set();
-            cart.forEach(c => { if (c.addedBy === 'leo') next.add(c.id); });
+            cart.forEach(c => { if (c.addedBy === 'thibaut') next.add(c.id); });
             setPayChecked(next);
             setTab('cart');
           }}/>
           <TweakButton secondary label="Reset commande" onClick={() => {
             setCart([...GROUP_CART]);
             setPayChecked(new Set());
+            setPresence({
+              thibaut: { joined: true, ready: false, paid: false },
+              lola:    { joined: true, ready: false, paid: false },
+              yass:    { joined: true, ready: false, paid: false },
+            });
+            setActivity([
+              { id: 'a1', t: Date.now() - 1000 * 60 * 2, text: 'Lola a rejoint la commande' },
+              { id: 'a2', t: Date.now() - 1000 * 60,     text: 'Yass a rejoint la commande' },
+            ]);
           }}/>
         </TweakSection>
       </TweaksPanel>
@@ -188,11 +252,11 @@ function BottomNav({ tab, setTab, cartCount }) {
     <div style={{
       position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 50,
       paddingBottom: 28, paddingTop: 10,
-      background: 'linear-gradient(to top, rgba(10,10,12,1) 50%, rgba(10,10,12,0.85) 90%, rgba(10,10,12,0))',
+      background: 'linear-gradient(to top, rgba(247,247,249,1) 55%, rgba(247,247,249,0.9) 85%, rgba(247,247,249,0))',
     }}>
       <div style={{
         margin: '0 14px', padding: '8px',
-        borderRadius: 22, background: 'rgba(22,22,26,0.92)',
+        borderRadius: 22, background: 'rgba(255,255,255,0.86)',
         border: `1px solid ${FF.lineHi}`,
         backdropFilter: 'blur(20px)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-around',
@@ -204,18 +268,18 @@ function BottomNav({ tab, setTab, cartCount }) {
             <button key={it.id} onClick={() => setTab(it.id)} style={{
               flex: 1, padding: '8px 6px', borderRadius: 14,
               background: active ? FF.text : 'transparent',
-              color: active ? '#0A0A0C' : FF.textDim,
+              color: active ? '#FFFFFF' : FF.textDim,
               border: 'none', cursor: 'pointer',
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
               position: 'relative', transition: 'all .18s',
             }}>
               <div style={{ position:'relative' }}>
-                <Cmp size={20} color={active ? '#0A0A0C' : FF.text} sw={active ? 2 : 1.75}/>
+                <Cmp size={20} color={active ? '#FFFFFF' : FF.text} sw={active ? 2 : 1.75}/>
                 {it.badge > 0 && (
                   <span style={{
                     position: 'absolute', top: -4, right: -8, minWidth: 16, height: 16,
                     padding: '0 4px', borderRadius: 8, background: FF.yellow,
-                    color: '#0A0A0C', fontSize: 9.5, fontWeight: 800,
+                    color: '#111114', fontSize: 9.5, fontWeight: 800,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>{it.badge}</span>
                 )}
@@ -236,7 +300,7 @@ function PaySheet({ state, amount, onConfirm, onClose }) {
   return (
     <div style={{
       position: 'absolute', inset: 0, zIndex: 200,
-      background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)',
+      background: 'rgba(17,17,20,0.28)', backdropFilter: 'blur(6px)',
       display: 'flex', alignItems: 'flex-end',
     }} onClick={onClose}>
       <div onClick={e => e.stopPropagation()} style={{
@@ -245,7 +309,7 @@ function PaySheet({ state, amount, onConfirm, onClose }) {
         padding: '14px 22px 34px',
         animation: 'ffSlideUp .25s ease-out',
       }}>
-        <div style={{ width: 36, height: 4, borderRadius: 4, background: 'rgba(255,255,255,0.15)', margin: '0 auto 14px' }}/>
+        <div style={{ width: 36, height: 4, borderRadius: 4, background: 'rgba(17,17,20,0.14)', margin: '0 auto 14px' }}/>
 
         {state === 'confirming' && (
           <>
@@ -290,7 +354,7 @@ function PaySheet({ state, amount, onConfirm, onClose }) {
               width: 72, height: 72, borderRadius: 72, margin: '0 auto',
               background: FF.yellow, display:'flex', alignItems:'center', justifyContent:'center',
             }}>
-              <Icons.Check size={36} color="#0A0A0C" sw={3.2}/>
+              <Icons.Check size={36} color="#111114" sw={3.2}/>
             </div>
             <div style={{ fontFamily:'"Space Grotesk"', fontSize: 22, fontWeight: 700, marginTop: 16, letterSpacing: -0.5 }}>Paiement confirmé</div>
             <div style={{ fontSize: 13, color: FF.textDim, marginTop: 6, padding: '0 24px', lineHeight: 1.4 }}>

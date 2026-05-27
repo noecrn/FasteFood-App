@@ -38,7 +38,7 @@ function CartScreen({ cart, setCart, onPay, payChecked, setPayChecked }) {
   const remainingAmount = groupTotal - paidAmount;
 
   return (
-    <div style={{ paddingBottom: 200, color: FF.text }}>
+    <div style={{ paddingBottom: 160, color: FF.text, overflowX: 'hidden' }}>
       {/* Header */}
       <div style={{ padding: '60px 22px 0' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -179,7 +179,7 @@ function CartScreen({ cart, setCart, onPay, payChecked, setPayChecked }) {
           <button onClick={() => {
             // select only your own items
             const next = new Set();
-            cart.forEach(c => { if (c.addedBy === 'leo' && !memberStatus[c.addedBy]?.paid) next.add(c.id); });
+            cart.forEach(c => { if (c.addedBy === 'thibaut' && !memberStatus[c.addedBy]?.paid) next.add(c.id); });
             setPayChecked(next);
           }} style={quickBtnC}>
             <Icons.Users size={13} color={FF.text}/> Mes articles
@@ -199,13 +199,8 @@ function CartScreen({ cart, setCart, onPay, payChecked, setPayChecked }) {
         </div>
       </div>
 
-      {/* Sticky bottom pay bar */}
-      <div style={{
-        position: 'absolute', bottom: 78, left: 0, right: 0,
-        padding: '12px 18px 14px',
-        background: 'linear-gradient(to top, rgba(10,10,12,0.98) 30%, rgba(10,10,12,0.85) 80%, rgba(10,10,12,0))',
-        backdropFilter: 'blur(20px)',
-      }}>
+      {/* Pay bar (in-flow, bottom of page) */}
+      <div style={{ padding: '22px 18px 110px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderRadius: 18, background: FF.card, border: `1px solid ${FF.line}`, marginBottom: 8 }}>
           <div>
             <div style={{ fontSize: 11, color: FF.textDim, letterSpacing: 0.2 }}>Ton total personnel</div>
@@ -219,9 +214,9 @@ function CartScreen({ cart, setCart, onPay, payChecked, setPayChecked }) {
         <div style={{ display: 'flex', gap: 8 }}>
           <button onClick={onPay} disabled={myTotal === 0} style={{
             flex: 1, padding: '15px', borderRadius: 16,
-            background: myTotal === 0 ? FF.card : '#000',
+            background: myTotal === 0 ? FF.card : '#111114',
             color: myTotal === 0 ? FF.textMute : '#fff',
-            border: `1px solid ${myTotal === 0 ? FF.line : FF.text}`,
+            border: `1px solid ${myTotal === 0 ? FF.line : '#111114'}`,
             fontWeight: 700, fontSize: 14, cursor: myTotal === 0 ? 'default' : 'pointer',
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
           }}>
@@ -230,7 +225,7 @@ function CartScreen({ cart, setCart, onPay, payChecked, setPayChecked }) {
           <button onClick={onPay} disabled={myTotal === 0} style={{
             flex: 1.4, padding: '15px', borderRadius: 16,
             background: myTotal === 0 ? FF.card : FF.yellow,
-            color: myTotal === 0 ? FF.textMute : '#0A0A0C',
+            color: myTotal === 0 ? FF.textMute : '#111114',
             border: 'none',
             fontWeight: 700, fontSize: 14, cursor: myTotal === 0 ? 'default' : 'pointer',
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
@@ -266,7 +261,7 @@ function LoyaltyScreen() {
   ];
 
   return (
-    <div style={{ paddingBottom: 120, color: FF.text }}>
+    <div style={{ paddingBottom: 120, color: FF.text, overflowX: 'hidden' }}>
       <div style={{ padding: '60px 22px 0' }}>
         <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <div>
