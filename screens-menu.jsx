@@ -10,7 +10,7 @@ function MenuScreen({ onOpenAssistant, onAddToGroup, onOpenCart, groupCount, gro
   const popular = PRODUCTS.slice(0, 4);
 
   return (
-    <div style={{ paddingBottom: 140, color: FF.text, fontFamily: '-apple-system, system-ui, sans-serif', overflowX: 'hidden' }}>
+    <div style={{ paddingBottom: groupCount > 0 ? 210 : 140, color: FF.text, fontFamily: '-apple-system, system-ui, sans-serif', overflowX: 'hidden' }}>
       {/* Header */}
       <div style={{ padding: '60px 22px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
@@ -112,7 +112,7 @@ function FeaturedCard({ product, onAdd }) {
   return (
     <div style={{ width: 200, flexShrink: 0, padding: 10, borderRadius: 22,
       background: FF.card, border: `1px solid ${FF.line}` }}>
-      <ProductImg tint={product.tint} label={`[ ${product.id}.jpg ]`} height={130} radius={14}/>
+      <ProductImg src={`img/${product.id}.jpg`} tint={product.tint} label={`[ ${product.id}.jpg ]`} height={130} radius={14}/>
       <div style={{ padding: '10px 4px 2px' }}>
         <div style={{ display:'flex', alignItems:'center', gap: 6 }}>
           <span style={{ ...ffPill({ background: `${product.tint}1A`, color: product.tint, border: `1px solid ${product.tint}33`, padding:'3px 8px', fontSize:10 }) }}>{product.tag}</span>
@@ -140,7 +140,7 @@ function PopularRow({ product, onAdd }) {
       width: '100%', boxSizing: 'border-box',
     }}>
       <div style={{ width: 64, height: 64, flexShrink: 0 }}>
-        <ProductImg tint={product.tint} label={product.id} height={64} radius={12}/>
+        <ProductImg src={`img/${product.id}.jpg`} tint={product.tint} label={product.id} height={64} radius={12}/>
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display:'flex', alignItems:'center', gap: 6, flexWrap:'nowrap', overflow:'hidden' }}>
@@ -287,7 +287,7 @@ function AssistantResult({ product, onRestart, onAdd, answers }) {
 
       <div style={{ padding: '22px 22px 0' }}>
         <div style={{ padding: 14, borderRadius: 24, background: FF.card, border: `1px solid ${FF.line}` }}>
-          <ProductImg tint={product.tint} label={`[ ${product.id}.jpg ]`} height={170} radius={16}/>
+          <ProductImg src={`img/${product.id}.jpg`} tint={product.tint} label={`[ ${product.id}.jpg ]`} height={170} radius={16}/>
           <div style={{ padding: '14px 6px 4px' }}>
             <div style={{ display:'flex', gap: 6, flexWrap:'wrap' }}>
               <span style={ffPill({ background: `${product.tint}1A`, color: product.tint, border: `1px solid ${product.tint}33` })}>{product.tag || 'Pour toi'}</span>

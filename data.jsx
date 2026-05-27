@@ -64,8 +64,8 @@ const MEMBER_BY_ID  = Object.fromEntries(GROUP_MEMBERS.map(m => [m.id, m]));
 
 Object.assign(window, { CATEGORIES, PRODUCTS, PRODUCT_BY_ID, GROUP_MEMBERS, GROUP_CART, MEMBER_BY_ID });
 
-// Product image — striped SVG placeholder with mono explainer
-function ProductImg({ tint = '#FF6B1F', label, height = 110, radius = 18 }) {
+// Product image — attempts to load from img/ folder, falls back to placeholder
+function ProductImg({ src, tint = '#FF6B1F', label, height = 110, radius = 18 }) {
   const id = React.useId().replace(/[:]/g, '');
   return (
     <div style={{
@@ -74,7 +74,15 @@ function ProductImg({ tint = '#FF6B1F', label, height = 110, radius = 18 }) {
       background: `linear-gradient(135deg, ${tint}22, ${tint}08)`,
       border: `1px solid ${tint}33`,
     }}>
-      <svg width="100%" height="100%" style={{ position: 'absolute', inset: 0 }}>
+      {src ? (
+        <img 
+          src={src} 
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+          alt={label}
+          onError={(e) => e.target.style.display = 'none'} 
+        />
+      ) : null}
+      <svg width="100%" height="100%" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <defs>
           <pattern id={`p${id}`} width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
             <line x1="0" y1="0" x2="0" y2="14" stroke={tint} strokeWidth="6" opacity="0.18"/>
@@ -86,6 +94,8 @@ function ProductImg({ tint = '#FF6B1F', label, height = 110, radius = 18 }) {
         position: 'absolute', bottom: 8, left: 10,
         fontFamily: 'ui-monospace, SFMono-Regular, monospace',
         fontSize: 9.5, letterSpacing: 0.4, color: tint, opacity: 0.85,
+        textShadow: '0 0 4px rgba(0,0,0,0.3)',
+        zIndex: 1
       }}>{label}</div>
     </div>
   );

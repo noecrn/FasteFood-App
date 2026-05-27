@@ -38,7 +38,7 @@ function CartScreen({ cart, setCart, onPay, payChecked, setPayChecked }) {
   const remainingAmount = groupTotal - paidAmount;
 
   return (
-    <div style={{ paddingBottom: 160, color: FF.text, overflowX: 'hidden' }}>
+    <div style={{ paddingBottom: 120, color: FF.text, overflowX: 'hidden' }}>
       {/* Header */}
       <div style={{ padding: '60px 22px 0' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -158,7 +158,7 @@ function CartScreen({ cart, setCart, onPay, payChecked, setPayChecked }) {
                         {checked && <Icons.Check size={13} color="#0A0A0C" sw={3.5}/>}
                       </div>
                       <div style={{ width: 44, height: 44, flexShrink: 0 }}>
-                        <ProductImg tint={p.tint} label={p.id} height={44} radius={10}/>
+                        <ProductImg src={`img/${p.id}.jpg`} tint={p.tint} label={p.id} height={44} radius={10}/>
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontFamily:'"Space Grotesk"', fontWeight: 700, fontSize: 13.5, color: FF.text, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{p.name}</div>
